@@ -1,0 +1,12 @@
+names:
+- tennis ball
+nc: 1
+roboflow:
+  license: CC BY 4.0
+  project: tennis-ball-detection-erxjm
+  url: https://universe.roboflow.com/supercell/tennis-ball-detection-erxjm/dataset/1
+  version: 1
+  workspace: supercell
+test: ../test/images
+train: tennis-ball-detection-1/train/images
+val: tennis-ball-detection-1/valid/images
