@@ -11,13 +11,13 @@ class CourtDetector:
         """Detect tennis court lines using edge detection and line detection"""
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         
-        # Apply Gaussian blur to reduce noise
+        
         blurred = cv2.GaussianBlur(gray, (5, 5), 0)
         
-        # Edge detection
+        
         edges = cv2.Canny(blurred, 50, 150, apertureSize=3)
         
-        # Detect lines using HoughLinesP
+        
         lines = cv2.HoughLinesP(edges, 1, np.pi/180, threshold=100, 
                                minLineLength=100, maxLineGap=10)
         
@@ -25,7 +25,7 @@ class CourtDetector:
         if lines is not None:
             for line in lines:
                 x1, y1, x2, y2 = line[0]
-                # Filter lines based on length and angle
+                
                 length = np.sqrt((x2-x1)**2 + (y2-y1)**2)
                 if length > 50:  # Minimum line length
                     angle = np.arctan2(y2-y1, x2-x1) * 180 / np.pi
@@ -39,31 +39,23 @@ class CourtDetector:
         """Detect the main court area"""
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         
-        # Convert to HSV for better color detection
+        
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
         
-        # Define range for court color (typically green, blue, or red)
-        # Green court
         lower_green = np.array([35, 50, 50])
         upper_green = np.array([85, 255, 255])
         
-        # Blue court
         lower_blue = np.array([100, 50, 50])
         upper_blue = np.array([130, 255, 255])
         
-        # Create masks
         mask_green = cv2.inRange(hsv, lower_green, upper_green)
         mask_blue = cv2.inRange(hsv, lower_blue, upper_blue)
         
-        # Combine masks
         court_mask = cv2.bitwise_or(mask_green, mask_blue)
         
-        # Morphological operations to clean up the mask
         kernel = np.ones((5,5), np.uint8)
         court_mask = cv2.morphologyEx(court_mask, cv2.MORPH_CLOSE, kernel)
         court_mask = cv2.morphologyEx(court_mask, cv2.MORPH_OPEN, kernel)
-        
-        # Find the largest contour (likely the court)
         contours, _ = cv2.findContours(court_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         
         if contours:

@@ -36,7 +36,7 @@ class BallTracker:
                                 'confidence': confidence
                             }
                         else:
-                            # If no tracking ID, use confidence-based detection
+                            
                             ball_dict[0] = {
                                 'bbox': bbox,
                                 'confidence': confidence
@@ -48,7 +48,7 @@ class BallTracker:
         """Interpolate missing ball positions for smoother tracking"""
         interpolated_detections = ball_detections.copy()
         
-        # Get positions where ball was detected
+        
         detected_positions = []
         for i, detection in enumerate(ball_detections):
             if detection:
@@ -58,7 +58,6 @@ class BallTracker:
                     center_y = (bbox[1] + bbox[3]) / 2
                     detected_positions.append((i, center_x, center_y, bbox))
         
-        # Interpolate missing positions
         if len(detected_positions) >= 2:
             for i in range(len(ball_detections)):
                 if not ball_detections[i]:  # Missing detection
